@@ -1,5 +1,7 @@
 # AngularLoaderComponent
 
+Demo application for the companion blog post - http://www.sagunpandey.com/2019/07/angular-8-reusable-loader-spinner-component/
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.3.
 
 ## Development server
