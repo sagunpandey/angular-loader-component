@@ -4,7 +4,7 @@ import {
   ComponentRef,
   Directive,
   HostListener,
-  Input,
+  Input, OnChanges,
   OnInit,
   TemplateRef,
   ViewContainerRef
@@ -14,7 +14,7 @@ import {SpinnerComponent} from '../components/spinner/spinner.component';
 @Directive({
   selector: '[appSpinner]'
 })
-export class AppSpinnerDirective implements OnInit {
+export class AppSpinnerDirective implements OnInit, OnChanges {
 
   private message: string;
 
@@ -47,6 +47,12 @@ export class AppSpinnerDirective implements OnInit {
 
   ngOnInit(): void {
 
+  }
+
+  ngOnChanges(changes) {
+    if (changes.spinnerMessage) {
+      this.spinnerComponent.instance.message = changes.spinnerMessage.currentValue;
+    }
   }
 
   @HostListener('click', ['$event'])
