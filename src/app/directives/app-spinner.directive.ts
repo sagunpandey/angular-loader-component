@@ -4,7 +4,7 @@ import {
   ComponentRef,
   Directive,
   HostListener,
-  Input,
+  Input, OnChanges, OnDestroy,
   OnInit,
   TemplateRef,
   ViewContainerRef
@@ -14,9 +14,10 @@ import {SpinnerComponent} from '../components/spinner/spinner.component';
 @Directive({
   selector: '[appSpinner]'
 })
-export class AppSpinnerDirective implements OnInit {
+export class AppSpinnerDirective implements OnInit, OnChanges, OnDestroy {
 
   private message: string;
+  private createEmbeddedViewTimer: number;
 
   @Input('appSpinner')
   set showSpinner(spinning: boolean) {
@@ -27,7 +28,9 @@ export class AppSpinnerDirective implements OnInit {
       this.spinnerComponent = this.container.createComponent(this.componentFactory);
       this.spinnerComponent.instance.message = this.message;
     } else {
-      this.container.createEmbeddedView(this.template);
+      this.createEmbeddedViewTimer = setTimeout(() => {
+        this.container.createEmbeddedView(this.template, 0);
+      });
     }
   }
 
@@ -47,6 +50,16 @@ export class AppSpinnerDirective implements OnInit {
 
   ngOnInit(): void {
 
+  }
+
+  ngOnChanges(changes) {
+    if (this.spinnerComponent && changes.spinnerMessage) {
+      this.spinnerComponent.instance.message = changes.spinnerMessage.currentValue;
+    }
+  }
+
+  ngOnDestroy() {
+    clearTimeout(this.createEmbeddedViewTimer);
   }
 
   @HostListener('click', ['$event'])
