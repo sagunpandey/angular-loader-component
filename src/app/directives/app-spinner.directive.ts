@@ -53,7 +53,7 @@ export class AppSpinnerDirective implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes) {
-    if (changes.spinnerMessage) {
+    if (this.spinnerComponent && changes.spinnerMessage) {
       this.spinnerComponent.instance.message = changes.spinnerMessage.currentValue;
     }
   }
